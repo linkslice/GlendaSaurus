@@ -1,0 +1,11 @@
+#!/bin/rc
+
+if (~ $#* 0) {
+    echo 'Usage: thes word' >[1=2]
+    exit usage
+}
+
+result = `{hget 'https://api.datamuse.com/words?ml='^$1}
+
+# Extract and format words
+echo $result | sed 's/},/\n/g' | awk -F'"' '/"word":/ {print $4}'
